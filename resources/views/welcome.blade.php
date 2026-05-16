@@ -10,33 +10,13 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
-        <!-- Styles -->
-        <style>
-            body {
-                font-family: 'Figtree', sans-serif;
-                background-color: #f3f4f6;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-            }
-            .container {
-                text-align: center;
-            }
-            h1 {
-                font-size: 3rem;
-                color: #1f2937;
-            }
-            p {
-                color: #4b5563;
-            }
-        </style>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body>
-        <div class="container">
-            <h1>Laravel</h1>
-            <p>Fresh Installation - Clean State</p>
+    <body class="bg-gray-100 flex justify-center items-center h-screen m-0 font-sans">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">Laravel + Tailwind CSS v4</h1>
+            <p class="text-gray-600 text-lg">Your fresh installation is ready with Tailwind CSS v4 successfully installed!</p>
         </div>
     </body>
 </html>
+
