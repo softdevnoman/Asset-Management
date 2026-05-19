@@ -38,8 +38,8 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Assets </div>
+                    <a href="{{ route('assets') }}" class="menu-link">
+                        <div> Assets </div>
                     </a>
                 </li>
             </ul>

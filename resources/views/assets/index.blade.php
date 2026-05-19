@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 @section('page-style')
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-icons.css') }}" />
 @endsection
@@ -9,7 +9,7 @@
     </h4>
 
     <div class="card">
-        <div class="text-end">
+        <div class="text-end p-5">
             <button class="btn btn-primary" type="button">Add Asset</button>
         </div>
         <div class="table-responsive">
@@ -20,9 +20,8 @@
                     <th>Name</th>
                     <th>Serial Number</th>
                     <th>Purchase Price</th>
-                    <th>Current Value</th>  
+                    <th>Purchased Date</th>
                     <th>Condition</th>
-                    <th>Assign To</th>
                     <th>Warranty Expiry</th>
                     <th>Maintenance Date</th>
                     <th>Notes</th>
@@ -35,9 +34,8 @@
                     <td>Dell XPS Laptop</td>
                     <td>SN123456789</td>
                     <td>$1,200.00</td>
-                    <td>$850.00</td>
+                    <td>2023-11-20</td>
                     <td><span class="badge bg-label-success">Good</span></td>
-                    <td>John Doe</td>
                     <td>2025-12-31</td>
                     <td>2024-06-15</td>
                     <td>Regular maintenance done</td>
@@ -65,9 +63,8 @@
                     <td>HP Monitor</td>
                     <td>SN987654321</td>
                     <td>$350.00</td>
-                    <td>$200.00</td>
+                    <td>2022-05-10</td>
                     <td><span class="badge bg-label-warning">Fair</span></td>
-                    <td>Jane Smith</td>
                     <td>2024-08-15</td>
                     <td>2024-07-10</td>
                     <td>Screen flickering issue</td>
@@ -95,9 +92,8 @@
                     <td>MacBook Pro</td>
                     <td>SN456789123</td>
                     <td>$2,500.00</td>
-                    <td>$2,100.00</td>
+                    <td>2023-03-15</td>
                     <td><span class="badge bg-label-success">Excellent</span></td>
-                    <td>Mike Johnson</td>
                     <td>2026-03-20</td>
                     <td>2024-08-01</td>
                     <td>Under Apple Care+</td>
@@ -125,9 +121,8 @@
                     <td>Office Chair</td>
                     <td>SN321654987</td>
                     <td>$450.00</td>
-                    <td>$300.00</td>
+                    <td>2021-08-22</td>
                     <td><span class="badge bg-label-danger">Poor</span></td>
-                    <td>Sarah Wilson</td>
                     <td>2024-01-10</td>
                     <td>2024-06-20</td>
                     <td>Needs replacement</td>
@@ -155,9 +150,8 @@
                     <td>Projector Epson</td>
                     <td>SN147852369</td>
                     <td>$800.00</td>
-                    <td>$450.00</td>
+                    <td>2022-11-10</td>
                     <td><span class="badge bg-label-info">Good</span></td>
-                    <td>Conference Room</td>
                     <td>2024-11-30</td>
                     <td>2024-07-25</td>
                     <td>Bulb replaced recently</td>
@@ -184,3 +178,5 @@
         </table>
     </div>
 </div>
+</div>
+@endsection

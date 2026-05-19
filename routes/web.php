@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AssetController;
 
 Route::get('/', function () {
     return redirect('login'); // or wherever you want the home page to go
@@ -23,4 +24,8 @@ Route::middleware('auth')->group(function(){
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::middleware('auth')->group(function(){
+    Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
 });
