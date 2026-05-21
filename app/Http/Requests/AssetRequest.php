@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AssetCondition;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class AssetRequest extends FormRequest
 {
@@ -35,7 +37,7 @@ class AssetRequest extends FormRequest
             'serial_number'    => 'required|string|max:100|unique:assets,serial_number' . $uniqueSuffix,
             'purchase_price'   => 'nullable|numeric|min:0',
             'purchase_date'    => 'nullable|date',
-            'condition'        => 'nullable|string|in:Excellent,Good,Fair,Poor,Under Repair',
+            'condition'        => ['nullable', new Enum(AssetCondition::class)],
             'warranty_expiry'  => 'nullable|date',
             'maintenance_date' => 'nullable|date',
             'notes'            => 'nullable|string|max:1000',
@@ -60,7 +62,6 @@ class AssetRequest extends FormRequest
             'purchase_date.date'     => 'Purchase date must be a valid date.',
             'warranty_expiry.date'   => 'Warranty expiry must be a valid date.',
             'maintenance_date.date'  => 'Maintenance date must be a valid date.',
-            'condition.in'           => 'Condition must be one of: Excellent, Good, Fair, Poor, Under Repair.',
         ];
     }
 }

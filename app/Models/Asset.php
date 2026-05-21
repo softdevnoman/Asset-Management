@@ -2,27 +2,72 @@
 
 namespace App\Models;
 
+use App\Enums\AssetCondition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes; //
 
 class Asset extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'asset_code',
         'name',
-        'serial_no',
-        'category',
-        'status',
+        'serial_number',
+        'purchased_date',
+        'purchased_price',
+        'condition',
+        'warranty_expiry',
+        'maintenance_date',
+        'notes',
+        'category_id',
+        'current_value',
+        'location_id',
+        'assign_to',
+        'supplier_id',
     ];
 
-    public function user(): BelongsTo
+    protected $casts = [
+        'warranty_expiry' => 'date',
+        'maintenance_date' => 'date',
+        'purchased_price' => 'decimal:2',
+    ];
+
+    protected $appends = [
+        'purchase_price',
+        'purchase_date',
+    ];
+
+    public function getPurchasePriceAttribute()
     {
-        return $this->belongsTo(User::class)->withDefault([
-            'name' => 'Deleted User',
-        ]);
+        return $this->purchased_price;
+    }
+
+    public function getPurchaseDateAttribute()
+    {
+        // purchased_date is varchar in DB, return as-is or format if it looks like a date
+        $val = $this->attributes['purchased_date'] ?? null;
+        if ($val) {
+            try {
+                return \Carbon\Carbon::parse($val)->format('Y-m-d');
+            } catch (\Exception $e) {
+                return $val;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Override the condition accessor to handle values not in the enum gracefully.
+     */
+    public function getConditionAttribute($value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        // Try to match the enum; if it fails, return the raw string
+        $enum = AssetCondition::tryFrom($value);
+        return $enum ? $enum->value : $value;
     }
 }

@@ -5,8 +5,9 @@
         <h5 class="modal-title" id="assetModalLabel">Add New Asset</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form method="POST" action="/assets">
+      <form id="assetForm" novalidate>
         @csrf
+        <input type="hidden" id="asset_id" name="asset_id">
         <div class="modal-body">
           <div class="row">
             <!-- Asset Code -->

@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
+    Route::post('/manage-assets', [AssetController::class, 'store'])->name('assets.store');
+    Route::get('/manage-assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
+    Route::put('/manage-assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
+    Route::delete('/manage-assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
 });
-
-Route::post('asset', [AssetController::class, 'store'])->name('asset');
