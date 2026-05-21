@@ -9,22 +9,25 @@
         </h4>
 
         <div class="card">
-            <div class="text-end p-5">
-                <button class="btn btn-primary" id="add-asset-btn" data-bs-toggle="modal" data-bs-target="#assetModal" type="button">Add
-                    Asset</button>
+            <div class="d-flex justify-content-between align-items-center p-4">
+                <div class="d-flex align-items-center gap-2">
+                    <input class="form-control" type="search" placeholder="Search assets..." id="assetSearch" style="width: 250px;" />
+                </div>
+                <button class="btn btn-primary" id="add-asset-btn" data-bs-toggle="modal" data-bs-target="#assetModal"
+                    type="button">Add Asset</button>
             </div>
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th>Asset Code</th>
-                            <th>Name</th>
-                            <th>Serial Number</th>
-                            <th>Purchase Price</th>
-                            <th>Purchased Date</th>
-                            <th>Condition</th>
-                            <th>Warranty Expiry</th>
-                            <th>Maintenance Date</th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="asset_code">Asset Code <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="name">Name <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="serial_number">Serial Number <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="purchased_price">Purchase Price <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="purchased_date">Purchased Date <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="condition">Condition <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="warranty_expiry">Warranty Expiry <i class="icon-base ti tabler-selector ms-1"></i></th>
+                            <th class="sortable text-nowrap cursor-pointer" data-column="maintenance_date">Maintenance Date <i class="icon-base ti tabler-selector ms-1"></i></th>
                             <th>Notes</th>
                             <th>Actions</th>
                         </tr>

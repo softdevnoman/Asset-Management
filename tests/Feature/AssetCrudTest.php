@@ -127,4 +127,65 @@ class AssetCrudTest extends TestCase
             'id' => $asset->id,
         ]);
     }
+
+    public function test_searching_assets()
+    {
+        $user = User::factory()->create();
+        
+        Asset::create([
+            'asset_code' => 'AST-SEARCH-1',
+            'name' => 'Matching Laptop',
+            'serial_number' => 'SN001',
+            'condition' => AssetCondition::GOOD,
+        ]);
+        Asset::create([
+            'asset_code' => 'AST-OTHER-2',
+            'name' => 'Generic Desk',
+            'serial_number' => 'SN002',
+            'condition' => AssetCondition::FAIR,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->getJson('/manage-assets?search=Matching');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(1);
+        $response->assertJsonFragment([
+            'asset_code' => 'AST-SEARCH-1'
+        ]);
+    }
+
+    public function test_sorting_assets()
+    {
+        $user = User::factory()->create();
+        
+        Asset::create([
+            'asset_code' => 'AST-A',
+            'name' => 'Apple MacBook',
+            'serial_number' => 'SN-A',
+            'condition' => AssetCondition::GOOD,
+        ]);
+        Asset::create([
+            'asset_code' => 'AST-Z',
+            'name' => 'Zebra Printer',
+            'serial_number' => 'SN-Z',
+            'condition' => AssetCondition::GOOD,
+        ]);
+
+        // Test sorting by name ASC
+        $responseAsc = $this->actingAs($user)
+            ->getJson('/manage-assets?sort_by=name&sort_dir=asc');
+        $responseAsc->assertStatus(200);
+        $dataAsc = $responseAsc->json();
+        $this->assertEquals('Apple MacBook', $dataAsc[0]['name']);
+        $this->assertEquals('Zebra Printer', $dataAsc[1]['name']);
+
+        // Test sorting by name DESC
+        $responseDesc = $this->actingAs($user)
+            ->getJson('/manage-assets?sort_by=name&sort_dir=desc');
+        $responseDesc->assertStatus(200);
+        $dataDesc = $responseDesc->json();
+        $this->assertEquals('Zebra Printer', $dataDesc[0]['name']);
+        $this->assertEquals('Apple MacBook', $dataDesc[1]['name']);
+    }
 }

@@ -6,10 +6,15 @@ $(document).ready(function () {
         }
     });
 
-    // 2. Load assets on page load
+    // 2. State variables for Search & Sort
+    var currentSearch = '';
+    var currentSortBy = 'created_at';
+    var currentSortDir = 'desc';
+
+    // 3. Load assets on page load
     loadAssets();
 
-    // 3. Helper: Map condition to badge class
+    // 4. Helper: Map condition to badge class
     function getBadgeClass(condition) {
         switch (condition) {
             case 'Excellent':
@@ -27,11 +32,16 @@ $(document).ready(function () {
         }
     }
 
-    // 4. Load Assets Function
+    // 5. Load Assets Function
     function loadAssets() {
         $.ajax({
             url: '/manage-assets',
             method: 'GET',
+            data: {
+                search: currentSearch,
+                sort_by: currentSortBy,
+                sort_dir: currentSortDir
+            },
             dataType: 'json',
             success: function (assets) {
                 var tbody = $('#asset-table-body');
@@ -301,4 +311,38 @@ $(document).ready(function () {
         $('.is-invalid').removeClass('is-invalid');
         $('.dynamic-error').remove();
     }
+
+    // 10. Search Event with Debounce
+    var searchTimeout;
+    $('#assetSearch').on('input', function () {
+        clearTimeout(searchTimeout);
+        currentSearch = $(this).val();
+        searchTimeout = setTimeout(function () {
+            loadAssets();
+        }, 300);
+    });
+
+    // 11. Column Sorting Click Handler
+    $(document).on('click', 'th.sortable', function () {
+        var column = $(this).data('column');
+        if (currentSortBy === column) {
+            currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortBy = column;
+            currentSortDir = 'asc';
+        }
+
+        // Toggle Icons
+        $('th.sortable i').removeClass('tabler-chevron-up tabler-chevron-down').addClass('tabler-selector');
+        
+        var icon = $(this).find('i');
+        icon.removeClass('tabler-selector');
+        if (currentSortDir === 'asc') {
+            icon.addClass('tabler-chevron-up');
+        } else {
+            icon.addClass('tabler-chevron-down');
+        }
+
+        loadAssets();
+    });
 });
