@@ -29,3 +29,5 @@ Route::middleware('auth')->group(function(){
 Route::middleware('auth')->group(function(){
     Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
 });
+
+Route::post('asset', [AssetController::class, 'store'])->name('asset');
