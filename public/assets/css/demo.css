@@ -16,6 +16,25 @@
     font-size: 1.375rem;
 }
 
+.app-brand-logo.demo img {
+    height: 32px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* Ensure the logo is visible and centered when the sidebar is collapsed */
+.layout-menu-collapsed:not(.layout-menu-hover) .app-brand-logo {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.layout-menu-collapsed:not(.layout-menu-hover) .app-brand-text {
+    display: none !important;
+}
+
 /* ! For .layout-navbar-fixed added fix padding top to .layout-page */
 /* Default navbar */
 .layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {

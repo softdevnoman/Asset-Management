@@ -6,128 +6,7 @@ $(document).ready(function () {
         }
     });
 
-    // 2. State variables for Search & Sort
-    var currentSearch = '';
-    var currentSortBy = 'created_at';
-    var currentSortDir = 'desc';
-
-    // 3. Load assets on page load
-    loadAssets();
-
-    // 4. Helper: Map condition to badge class
-    function getBadgeClass(condition) {
-        switch (condition) {
-            case 'Excellent':
-                return 'bg-label-success';
-            case 'Good':
-                return 'bg-label-info';
-            case 'Fair':
-                return 'bg-label-warning';
-            case 'Poor':
-                return 'bg-label-danger';
-            case 'Under Repair':
-                return 'bg-label-secondary';
-            default:
-                return 'bg-label-primary';
-        }
-    }
-
-    // 5. Load Assets Function
-    function loadAssets() {
-        $.ajax({
-            url: '/manage-assets',
-            method: 'GET',
-            data: {
-                search: currentSearch,
-                sort_by: currentSortBy,
-                sort_dir: currentSortDir
-            },
-            dataType: 'json',
-            success: function (assets) {
-                var tbody = $('#asset-table-body');
-                tbody.empty();
-
-                if (assets.length === 0) {
-                    tbody.append(`
-                        <tr>
-                            <td colspan="10" class="text-center p-5">
-                                <div class="d-flex flex-column align-items-center justify-content-center">
-                                    <i class="icon-base ti tabler-box-off text-muted mb-2" style="font-size: 2.5rem;"></i>
-                                    <h6 class="text-muted mb-1">No assets found</h6>
-                                    <span class="text-muted small">Click "Add Asset" to get started.</span>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
-                    return;
-                }
-
-                assets.forEach(function (asset) {
-                    var badgeClass = getBadgeClass(asset.condition);
-                    var price = asset.purchase_price ? '$' + parseFloat(asset.purchase_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
-                    var purchaseDate = asset.purchase_date ? asset.purchase_date : '-';
-                    var warrantyExpiry = asset.warranty_expiry ? asset.warranty_expiry.split('T')[0] : '-';
-                    var maintenanceDate = asset.maintenance_date ? asset.maintenance_date.split('T')[0] : '-';
-                    var notes = asset.notes ? asset.notes : '';
-
-                    var row = `
-                        <tr>
-                            <td><span class="fw-medium">${asset.asset_code}</span></td>
-                            <td>${asset.name}</td>
-                            <td>${asset.serial_number || ''}</td>
-                            <td>${price}</td>
-                            <td>${purchaseDate}</td>
-                            <td><span class="badge ${badgeClass}">${asset.condition || '-'}</span></td>
-                            <td>${warrantyExpiry}</td>
-                            <td>${maintenanceDate}</td>
-                            <td class="text-truncate" style="max-width: 150px;" title="${notes}">${notes}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="icon-base ti tabler-dots-vertical"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item edit-btn" href="javascript:void(0);" data-id="${asset.id}">
-                                            <i class="icon-base ti tabler-pencil me-1"></i>Edit
-                                        </a>
-                                        <a class="dropdown-item delete-btn" href="javascript:void(0);" data-id="${asset.id}">
-                                            <i class="icon-base ti tabler-trash me-1"></i>Delete
-                                        </a>
-                                        <a class="dropdown-item view-btn" href="javascript:void(0);" data-id="${asset.id}">
-                                            <i class="icon-base ti tabler-eye me-1"></i>View
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.append(row);
-                });
-            },
-            error: function () {
-                var tbody = $('#asset-table-body');
-                tbody.empty();
-                tbody.append(`
-                    <tr>
-                        <td colspan="10" class="text-center p-5">
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                <i class="icon-base ti tabler-alert-triangle text-danger mb-2" style="font-size: 2.5rem;"></i>
-                                <h6 class="text-danger mb-1">Error loading assets</h6>
-                                <span class="text-muted small">Could not retrieve assets from the server.</span>
-                            </div>
-                        </td>
-                    </tr>
-                `);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load assets.'
-                });
-            }
-        });
-    }
-
-    // 5. Open Modal for Add
+    // 2. Open Modal for Add
     $('#add-asset-btn').on('click', function () {
         $('#assetForm')[0].reset();
         $('#asset_id').val('');
@@ -137,7 +16,7 @@ $(document).ready(function () {
         clearValidationErrors();
     });
 
-    // 6. View Asset Details
+    // 3. View Asset Details
     $(document).on('click', '.view-btn', function () {
         var id = $(this).data('id');
         $.ajax({
@@ -161,7 +40,7 @@ $(document).ready(function () {
         });
     });
 
-    // 7. Edit Asset Details
+    // 4. Edit Asset Details
     $(document).on('click', '.edit-btn', function () {
         var id = $(this).data('id');
         $.ajax({
@@ -185,7 +64,7 @@ $(document).ready(function () {
         });
     });
 
-    // 8. Submit Form (Create & Update)
+    // 5. Submit Form (Create & Update)
     $('#assetForm').on('submit', function (e) {
         e.preventDefault();
         clearValidationErrors();
@@ -220,8 +99,9 @@ $(document).ready(function () {
                     text: response.message,
                     timer: 1500,
                     showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
                 });
-                loadAssets();
             },
             error: function (xhr) {
                 if (xhr.status === 422) {
@@ -249,7 +129,7 @@ $(document).ready(function () {
         });
     });
 
-    // 9. Delete Asset
+    // 6. Delete Asset
     $(document).on('click', '.delete-btn', function () {
         var id = $(this).data('id');
         Swal.fire({
@@ -272,8 +152,9 @@ $(document).ready(function () {
                             text: response.message,
                             timer: 1500,
                             showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
                         });
-                        loadAssets();
                     },
                     error: function () {
                         Swal.fire({
@@ -312,37 +193,28 @@ $(document).ready(function () {
         $('.dynamic-error').remove();
     }
 
-    // 10. Search Event with Debounce
-    var searchTimeout;
-    $('#assetSearch').on('input', function () {
-        clearTimeout(searchTimeout);
-        currentSearch = $(this).val();
-        searchTimeout = setTimeout(function () {
-            loadAssets();
-        }, 300);
-    });
-
-    // 11. Column Sorting Click Handler
-    $(document).on('click', 'th.sortable', function () {
-        var column = $(this).data('column');
-        if (currentSortBy === column) {
-            currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
-        } else {
-            currentSortBy = column;
-            currentSortDir = 'asc';
+    // 7. Auto-search on input with Debounce and cursor restoration
+    var searchInput = $('input[name="search"]');
+    if (searchInput.length) {
+        // Restore focus and cursor position at the end of input if search has a value
+        if (searchInput.val()) {
+            searchInput.focus();
+            var valLength = searchInput.val().length;
+            searchInput[0].setSelectionRange(valLength, valLength);
         }
 
-        // Toggle Icons
-        $('th.sortable i').removeClass('tabler-chevron-up tabler-chevron-down').addClass('tabler-selector');
-        
-        var icon = $(this).find('i');
-        icon.removeClass('tabler-selector');
-        if (currentSortDir === 'asc') {
-            icon.addClass('tabler-chevron-up');
-        } else {
-            icon.addClass('tabler-chevron-down');
-        }
-
-        loadAssets();
-    });
+        var searchTimeout;
+        searchInput.on('input', function () {
+            clearTimeout(searchTimeout);
+            var val = $(this).val().trim();
+            var form = $(this).closest('form');
+            searchTimeout = setTimeout(function () {
+                if (val === '') {
+                    window.location.href = form.attr('action');
+                } else {
+                    form.submit();
+                }
+            }, 500); // 500ms debounce
+        });
+    }
 });

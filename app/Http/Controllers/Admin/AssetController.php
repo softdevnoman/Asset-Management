@@ -12,50 +12,50 @@ class AssetController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $query = Asset::query();
+        $query = Asset::query();
 
-            // Search functionality
-            if ($request->filled('search')) {
-                $search = $request->input('search');
-                $query->where(function ($q) use ($search) {
-                    $q->where('asset_code', 'like', "%{$search}%")
-                      ->orWhere('name', 'like', "%{$search}%")
-                      ->orWhere('serial_number', 'like', "%{$search}%")
-                      ->orWhere('condition', 'like', "%{$search}%")
-                      ->orWhere('notes', 'like', "%{$search}%");
-                });
-            }
-
-            // Sorting functionality
-            $sortBy = $request->input('sort_by', 'created_at');
-            $sortDir = $request->input('sort_dir', 'desc');
-
-            // Allow only valid sort directions
-            $sortDir = in_array(strtolower($sortDir), ['asc', 'desc']) ? $sortDir : 'desc';
-
-            // Allow only valid columns to avoid SQL injection
-            $allowedColumns = [
-                'asset_code',
-                'name',
-                'serial_number',
-                'purchased_price',
-                'purchased_date',
-                'condition',
-                'warranty_expiry',
-                'maintenance_date',
-                'created_at'
-            ];
-
-            if (in_array($sortBy, $allowedColumns)) {
-                $query->orderBy($sortBy, $sortDir);
-            } else {
-                $query->orderBy('created_at', 'desc');
-            }
-
-            return response()->json($query->get());
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('asset_code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('serial_number', 'like', "%{$search}%")
+                  ->orWhere('condition', 'like', "%{$search}%")
+                  ->orWhere('notes', 'like', "%{$search}%");
+            });
         }
-        return view('admin.assets.index');
+
+        // Sorting functionality
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortDir = $request->input('sort_dir', 'desc');
+
+        // Allow only valid sort directions
+        $sortDir = in_array(strtolower($sortDir), ['asc', 'desc']) ? $sortDir : 'desc';
+
+        // Allow only valid columns to avoid SQL injection
+        $allowedColumns = [
+            'asset_code',
+            'name',
+            'serial_number',
+            'purchased_price',
+            'purchased_date',
+            'condition',
+            'warranty_expiry',
+            'maintenance_date',
+            'created_at'
+        ];
+
+        if (in_array($sortBy, $allowedColumns)) {
+            $query->orderBy($sortBy, $sortDir);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // Paginate assets with query string preservation
+        $assets = $query->paginate(10)->withQueryString();
+
+        return view('admin.assets.index', compact('assets'));
     }
 
     public function store(AssetRequest $request)

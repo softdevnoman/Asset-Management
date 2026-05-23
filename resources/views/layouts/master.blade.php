@@ -8,12 +8,12 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Demo: Dashboard - Analytics | Vuexy - Bootstrap Dashboard PRO</title>
+    <title>{{ config('app.name', 'Asset Management') }}</title>
 
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/icons/brands/logo.png') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -105,62 +105,62 @@
     </div>
     <!-- / Layout wrapper -->
 
-            <!-- Core JS -->
-            <!-- build:js assets/vendor/js/theme.js  -->
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/theme.js  -->
 
-            <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
 
-            <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
-            <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
-            <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-
-
-            <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-
-            <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
-
-            <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
-
-            <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
-
-            <!-- endbuild -->
-
-            <!-- Vendors JS -->
-            <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-            <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
-            <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-            <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-
-            <!-- Main JS -->
-
-            <script src="{{ asset('assets/js/main.js') }}"></script>
-
-            <!-- Page JS -->
-            <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
 
 
+    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
 
-            @yield('scripts')
-            @stack('scripts')
+    <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
 
-            <!-- Global Form Validation & Modal Management -->
-            <script>
-                $(document).ready(function() {
-                    // 1. Global Bootstrap Validation Logic
-                    var forms = document.querySelectorAll('.needs-validation');
-                    Array.prototype.slice.call(forms).forEach(function(form) {
-                        form.addEventListener('submit', function(event) {
-                            if (!form.checkValidity()) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
+    <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
 
-                    // 2. Global Modal Persistence: Auto-open any modal that has errors inside it
-                });
-            </script>
+    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
+    <!-- Main JS -->
+
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script>
+
+
+
+    @yield('scripts')
+    @stack('scripts')
+
+    <!-- Global Form Validation & Modal Management -->
+    <script>
+        $(document).ready(function() {
+            // 1. Global Bootstrap Validation Logic
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+            // 2. Global Modal Persistence: Auto-open any modal that has errors inside it
+        });
+    </script>
 </body>
 
 </html>
