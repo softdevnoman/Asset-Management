@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AssetRequest;
 use App\Models\Asset;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class AssetController extends Controller
 
             return response()->json($query->get());
         }
-        return view('assets.index');
+        return view('admin.assets.index');
     }
 
     public function store(AssetRequest $request)

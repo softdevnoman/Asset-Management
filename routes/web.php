@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AssetController;
+use App\Http\Controllers\Admin\AssetController;
 
 Route::get('/', function () {
     return redirect('login'); // or wherever you want the home page to go
@@ -24,6 +24,9 @@ Route::middleware('auth')->group(function(){
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/employees', function() {
+        return 'Employee management page coming soon!';
+    })->name('employees');
 });
 
 Route::middleware('auth')->group(function(){

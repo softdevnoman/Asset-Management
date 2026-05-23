@@ -51,15 +51,29 @@
                 </li>
             </ul>
         </li>
+        <!-- Accounts -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base ti tabler-smart-home"></i>
+                <div>Accounts Management</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('employees') }}" class="menu-link">
+                        <div> Employee </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </aside>
 @push('scripts')
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             // console.log('this us ahrfnaiy');
             const menuItem = document.querySelectorAll('.menu-item');
-            menuItem.forEach(function(item){
-                item.addEventListener('click', function(){
+            menuItem.forEach(function(item) {
+                item.addEventListener('click', function() {
                     item.classList.toggle('active');
                 });
             });

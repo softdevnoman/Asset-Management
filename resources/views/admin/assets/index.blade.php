@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-icons.css') }}" />
 @endsection
 @section('content')
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
         <h4 class="py-3 mb-4">
             <span class="text-muted fw-light">Asset</span> Management
         </h4>
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    @include('assets.asset-modal')
+    @include('admin.assets.asset-modal')
 @endsection
 
 @push('scripts')
