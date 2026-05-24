@@ -100,7 +100,7 @@ $(document).ready(function () {
                     timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
-                    window.location.reload();
+                    fetchAssets(window.location.href);
                 });
             },
             error: function (xhr) {
@@ -153,7 +153,7 @@ $(document).ready(function () {
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            window.location.reload();
+                            fetchAssets(window.location.href);
                         });
                     },
                     error: function () {
@@ -193,6 +193,51 @@ $(document).ready(function () {
         $('.dynamic-error').remove();
     }
 
+    // Helper: AJAX Table Fetching with state preservation
+    function fetchAssets(url, pushToHistory = true) {
+        var wrapper = $('#assets-table-wrapper');
+        wrapper.css('opacity', 0.5);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            success: function (response) {
+                wrapper.html(response);
+                wrapper.css('opacity', 1);
+                if (pushToHistory) {
+                    window.history.pushState({ url: url }, '', url);
+                }
+            },
+            error: function () {
+                wrapper.css('opacity', 1);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to fetch assets.'
+                });
+            }
+        });
+    }
+
+    // Intercept click on sorting headers and pagination links
+    $(document).on('click', '#assets-table-wrapper .sort-link, #assets-table-wrapper .pagination-container a', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        if (url) {
+            fetchAssets(url);
+        }
+    });
+
+    // Listen to history navigation (back/forward)
+    $(window).on('popstate', function () {
+        fetchAssets(window.location.href, false);
+    });
+
+    // Prevent default form submission for search
+    $('input[name="search"]').closest('form').on('submit', function (e) {
+        e.preventDefault();
+    });
+
     // 7. Auto-search on input with Debounce and cursor restoration
     var searchInput = $('input[name="search"]');
     if (searchInput.length) {
@@ -207,14 +252,17 @@ $(document).ready(function () {
         searchInput.on('input', function () {
             clearTimeout(searchTimeout);
             var val = $(this).val().trim();
-            var form = $(this).closest('form');
             searchTimeout = setTimeout(function () {
+                var currentUrl = new URL(window.location.href);
                 if (val === '') {
-                    window.location.href = form.attr('action');
+                    currentUrl.searchParams.delete('search');
                 } else {
-                    form.submit();
+                    currentUrl.searchParams.set('search', val);
                 }
-            }, 500); // 500ms debounce
+                // Reset page on search change to avoid empty pages
+                currentUrl.searchParams.delete('page');
+                fetchAssets(currentUrl.toString());
+            }, 1000); // 1000ms debounce
         });
     }
 });

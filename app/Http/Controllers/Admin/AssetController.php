@@ -52,8 +52,16 @@ class AssetController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
         // Paginate assets with query string preservation
         $assets = $query->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.assets.table', compact('assets'));
+        }
 
         return view('admin.assets.index', compact('assets'));
     }
