@@ -18,14 +18,14 @@ Route::middleware('guest')->group(function(){
 
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth' )->group(function(){
     Route::get('/dashboard', function(){
         return view('dashboard');
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/employees', function() {
-        return 'Employee management page coming soon!';
+        return view('admin.employees.index');
     })->name('employees');
 });
 
