@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function(){
     })->name('employees');
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
     Route::post('/manage-assets', [AssetController::class, 'store'])->name('assets.store');
     Route::get('/manage-assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
