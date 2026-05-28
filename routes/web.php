@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AssetController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Employee\Employee;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('login'); // or wherever you want the home page to go
@@ -24,9 +24,14 @@ Route::middleware('auth' )->group(function(){
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/employees', function() {
-        return view('admin.employees.index');
-    })->name('employees');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function(){
+    Route::get('/employees', [Employee::class, 'index'])->name('employees');
+    Route::post('/employees', [Employee::class, 'store'])->name('employees.store');
+    Route::get('/employees/{employee}', [Employee::class, 'show'])->name('employees.show');
+    Route::put('/employees/{employee}', [Employee::class, 'update'])->name('employees.update');
+    Route::delete('/employees/{employee}', [Employee::class, 'destroy'])->name('employees.destroy');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function(){

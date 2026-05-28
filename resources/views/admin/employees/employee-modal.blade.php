@@ -9,34 +9,6 @@
         @csrf
         <input type="hidden" id="employee_id_pk" name="employee_id_pk">
         <div class="modal-body">
-          <div class="row">
-            <!-- Name -->
-            <div class="col-md-6 mb-4">
-              <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" placeholder="Enter full name" required>
-            </div>
-
-            <!-- Email -->
-            <div class="col-md-6 mb-4">
-              <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-              <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" required>
-            </div>
-          </div>
-
-          <div class="row">
-            <!-- Password -->
-            <div class="col-md-6 mb-4 password-field">
-              <label for="password" class="form-label">Password <span class="text-danger" id="password-asterisk">*</span></label>
-              <input type="password" id="password" name="password" class="form-control" placeholder="········">
-              <small class="text-muted edit-help-text d-none">Leave blank to keep current password.</small>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="col-md-6 mb-4 password-field">
-              <label for="password_confirmation" class="form-label">Confirm Password <span class="text-danger" id="password-conf-asterisk">*</span></label>
-              <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="········">
-            </div>
-          </div>
 
           <div class="row">
             <!-- Employee ID -->

@@ -15,21 +15,21 @@ return new class extends Migration
     {
         Schema::create('employee', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('employee_id')->unique();
             $table->string('position');
             $table->string('department');
             $table->string('phone');
-            $table->string('profile_photo');
+            $table->string('profile_photo')->nullable();
             $table->date('join_date');
             $table->enum('status', ['active', 'inactive', 'on_leave'])->default('active');
             $table->timestamps();
         });
     }
 
-    /**
+    /*
      * Reverse the migrations.
-     */
+    */
     public function down(): void
     {
         Schema::dropIfExists('employee');
