@@ -14,6 +14,8 @@ $(document).ready(function () {
         $('#employeeForm').find('input, select').prop('disabled', false);
         $('#employeeForm').find('button[type="submit"]').show();
         $('.current-avatar-preview').addClass('d-none');
+        $('.dynamic-option').remove();
+        $('#user_id').val('');
         clearValidationErrors();
     });
 
@@ -98,7 +100,7 @@ $(document).ready(function () {
                     timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
-                    location.reload();
+                    fetchEmployees(window.location.href);
                 });
             },
             error: function (xhr) {
@@ -150,7 +152,7 @@ $(document).ready(function () {
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            location.reload();
+                            fetchEmployees(window.location.href);
                         });
                     },
                     error: function () {
@@ -168,6 +170,8 @@ $(document).ready(function () {
     // Helper: Populate Modal Fields
     function populateModal(employee) {
         $('#employee_id_pk').val(employee.id);
+        $('#name').val(employee.name);
+        $('#email').val(employee.email);
         $('#employee_id').val(employee.employee_id);
         $('#phone').val(employee.phone);
         $('#position').val(employee.position);
@@ -176,6 +180,23 @@ $(document).ready(function () {
         var joinDate = employee.join_date ? employee.join_date.split('T')[0] : '';
         $('#join_date').val(joinDate);
         $('#status').val(employee.status);
+
+        // Populate user dropdown
+        if (employee.user) {
+            // Check if user option already exists, if not add it dynamically
+            if ($('#user_id option[value="' + employee.user_id + '"]').length === 0) {
+                $('#user_id').append(
+                    $('<option>', {
+                        value: employee.user_id,
+                        text: employee.user.name + ' (' + employee.user.email + ')',
+                        class: 'dynamic-option'
+                    })
+                );
+            }
+            $('#user_id').val(employee.user_id);
+        } else {
+            $('#user_id').val('');
+        }
 
         if (employee.profile_photo) {
             $('.current-avatar-preview').removeClass('d-none');
@@ -189,5 +210,76 @@ $(document).ready(function () {
     function clearValidationErrors() {
         $('.is-invalid').removeClass('is-invalid');
         $('.dynamic-error').remove();
+    }
+
+    // Helper: AJAX Table Fetching with state preservation
+    function fetchEmployees(url, pushToHistory = true) {
+        var wrapper = $('#employees-table-wrapper');
+        wrapper.css('opacity', 0.5);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            success: function (response) {
+                wrapper.html(response);
+                wrapper.css('opacity', 1);
+                if (pushToHistory) {
+                    window.history.pushState({ url: url }, '', url);
+                }
+            },
+            error: function () {
+                wrapper.css('opacity', 1);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to fetch employees.'
+                });
+            }
+        });
+    }
+
+    // Intercept click on sorting headers and pagination links
+    $(document).on('click', '#employees-table-wrapper .sort-link, #employees-table-wrapper .pagination-container a', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        if (url) {
+            fetchEmployees(url);
+        }
+    });
+
+    // Listen to history navigation (back/forward)
+    $(window).on('popstate', function () {
+        fetchEmployees(window.location.href, false);
+    });
+
+    // Prevent default form submission for search
+    $('input[name="search"]').closest('form').on('submit', function (e) {
+        e.preventDefault();
+    });
+
+    // Auto-search on input with Debounce and cursor restoration
+    var searchInput = $('input[name="search"]');
+    if (searchInput.length) {
+        if (searchInput.val()) {
+            searchInput.focus();
+            var valLength = searchInput.val().length;
+            searchInput[0].setSelectionRange(valLength, valLength);
+        }
+
+        var searchTimeout;
+        searchInput.on('input', function () {
+            clearTimeout(searchTimeout);
+            var val = $(this).val().trim();
+            searchTimeout = setTimeout(function () {
+                var currentUrl = new URL(window.location.href);
+                if (val === '') {
+                    currentUrl.searchParams.delete('search');
+                } else {
+                    currentUrl.searchParams.set('search', val);
+                }
+                currentUrl.searchParams.delete('page');
+                fetchEmployees(currentUrl.toString());
+            }, 1000); // 1000ms debounce
+        });
     }
 });

@@ -26,6 +26,8 @@ class EmployeeRequest extends FormRequest
 
         return [
             'user_id'       => 'nullable|integer|exists:users,id|unique:employee,user_id,' . ($employeeId ?? 'NULL'),
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|max:255|unique:employee,email,' . ($employeeId ?? 'NULL'),
             'employee_id'   => 'required|string|max:50|unique:employee,employee_id,' . ($employeeId ?? 'NULL'),
             'position'      => 'required|string|max:100',
             'department'    => 'required|string|max:100',
@@ -41,6 +43,10 @@ class EmployeeRequest extends FormRequest
         return [
             'user_id.exists'         => 'Selected user is invalid.',
             'user_id.unique'         => 'An employee profile already exists for this user.',
+            'name.required'          => 'Name is required.',
+            'email.required'         => 'Email is required.',
+            'email.email'            => 'Email must be a valid email address.',
+            'email.unique'           => 'Email has already been taken.',
             'employee_id.required'   => 'Employee ID is required.',
             'employee_id.unique'     => 'Employee ID has already been taken.',
             'position.required'      => 'Position is required.',

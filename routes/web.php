@@ -2,24 +2,22 @@
 
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Employee\Employee;
+use App\Http\Controllers\Employee\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('login'); // or wherever you want the home page to go
 });
 
-Route::middleware('guest')->group(function(){
-    Route::get('/register', [AuthController::class , 'showRegisterForm'])->name('register');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/login', [AuthController::class, 'LoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-
-
 });
 
-Route::middleware('auth' )->group(function(){
-    Route::get('/dashboard', function(){
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -27,14 +25,14 @@ Route::middleware('auth' )->group(function(){
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::get('/employees', [Employee::class, 'index'])->name('employees');
-    Route::post('/employees', [Employee::class, 'store'])->name('employees.store');
-    Route::get('/employees/{employee}', [Employee::class, 'show'])->name('employees.show');
-    Route::put('/employees/{employee}', [Employee::class, 'update'])->name('employees.update');
-    Route::delete('/employees/{employee}', [Employee::class, 'destroy'])->name('employees.destroy');
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
+    Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
+    Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function(){
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
     Route::post('/manage-assets', [AssetController::class, 'store'])->name('assets.store');
     Route::get('/manage-assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
