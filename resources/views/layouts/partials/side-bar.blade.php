@@ -1,8 +1,10 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
     <div class="app-brand demo ">
         <a href="{{ route('dashboard') }}" class="app-brand-link">
-            <span class="app-brand-logo demo" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                <img src="{{ asset('assets/img/icons/brands/logo.png') }}" alt="Logo" style="height: 30px; width: auto; max-width: 100%; object-fit: contain; flex-shrink: 0;">
+            <span class="app-brand-logo demo"
+                style="flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ asset('assets/img/icons/brands/logo.png') }}" alt="Logo"
+                    style="height: 30px; width: auto; max-width: 100%; object-fit: contain; flex-shrink: 0;">
             </span>
             <span class="app-brand-text demo menu-text fw-bold ms-3">{{ config('app.name', 'Asset Management') }}</span>
         </a>
@@ -31,7 +33,7 @@
             </ul>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('accounts') }}" class="menu-link">
                         <div> Accounts</div>
                     </a>
                 </li>

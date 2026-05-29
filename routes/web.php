@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Employee\EmployeeController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return redirect('login'); // or wherever you want the home page to go
@@ -24,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function(){
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
     Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
@@ -40,4 +42,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/manage-assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
 });
 
-
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
+});
