@@ -9,9 +9,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.js',
-                'resources/js/asset.js',
-                'resources/js/employee.js'
+                'resources/js/app.js'
             ],
             refresh: true,
         }),

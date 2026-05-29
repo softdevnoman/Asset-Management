@@ -108,7 +108,14 @@
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/theme.js  -->
 
-    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <!-- jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- Axios from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+
+    <!-- Bootstrap compiled wrapper -->
+    <script src="{{ asset('assets/js/bootstrap-compiled.js') }}"></script>
 
     <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>

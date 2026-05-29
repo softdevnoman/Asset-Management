@@ -19,6 +19,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->environment('local')) {
+            $hotFile = public_path('hot');
+            if (file_exists($hotFile)) {
+                // Perform a quick socket check to see if the Vite dev server is running on 127.0.0.1:5173
+                $connection = @fsockopen('127.0.0.1', 5173, $errno, $errstr, 0.05);
+                if (!$connection) {
+                    @unlink($hotFile);
+                } else {
+                    fclose($connection);
+                }
+            }
+        }
     }
 }

@@ -39,3 +39,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/manage-assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
     Route::delete('/manage-assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
 });
+
+

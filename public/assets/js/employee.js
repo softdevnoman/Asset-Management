@@ -1,5 +1,3 @@
-const $ = window.jQuery;
-
 $(document).ready(function () {
     // 1. AJAX Setup for CSRF Token
     $.ajaxSetup({
@@ -9,92 +7,92 @@ $(document).ready(function () {
     });
 
     // 2. Open Modal for Add
-    $('#add-asset-btn').on('click', function () {
-        $('#assetForm')[0].reset();
-        $('#asset_id').val('');
-        $('#assetModalLabel').text('Add New Asset');
-        $('#assetForm').find('input, select, textarea').prop('disabled', false);
-        $('#assetForm').find('button[type="submit"]').show();
+    $("#add-employee-btn").on('click', function () {
+        $('#employeeForm')[0].reset();
+        $('#employee_id_pk').val('');
+        $('#employeeModalLabel').text('Add New Employee');
+        $('#employeeForm').find('input, select').prop('disabled', false);
+        $('#employeeForm').find('button[type="submit"]').show();
+        $('.current-avatar-preview').addClass('d-none');
+        $('.dynamic-option').remove();
+        $('#user_id').val('');
         clearValidationErrors();
     });
 
-    // 3. View Asset Details
+    // 3. View Employee Details
     $(document).on('click', '.view-btn', function () {
         var id = $(this).data('id');
         $.ajax({
-            url: '/manage-assets/' + id,
+            url: '/employees/' + id,
             method: 'GET',
-            success: function (asset) {
-                populateModal(asset);
-                $('#assetModalLabel').text('View Asset Details');
-                $('#assetForm').find('input, select, textarea').prop('disabled', true);
-                $('#assetForm').find('button[type="submit"]').hide();
+            success: function (employee) {
+                populateModal(employee);
+                $('#employeeModalLabel').text('View Employee Details');
+                $('#employeeForm').find('input, select').prop('disabled', true);
+                $('#employeeForm').find('button[type="submit"]').hide();
                 clearValidationErrors();
-                $('#assetModal').modal('show');
+                $('#employeeModal').modal('show');
             },
             error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Failed to fetch asset details.'
+                    text: 'Failed to fetch employee details.'
                 });
             }
         });
     });
 
-    // 4. Edit Asset Details
+    // 4. Edit Employee Details
     $(document).on('click', '.edit-btn', function () {
         var id = $(this).data('id');
         $.ajax({
-            url: '/manage-assets/' + id,
+            url: '/employees/' + id,
             method: 'GET',
-            success: function (asset) {
-                populateModal(asset);
-                $('#assetModalLabel').text('Edit Asset');
-                $('#assetForm').find('input, select, textarea').prop('disabled', false);
-                $('#assetForm').find('button[type="submit"]').show();
+            success: function (employee) {
+                populateModal(employee);
+                $('#employeeModalLabel').text('Edit Employee');
+                $('#employeeForm').find('input, select').prop('disabled', false);
+                $('#employeeForm').find('button[type="submit"]').show();
                 clearValidationErrors();
-                $('#assetModal').modal('show');
+                $('#employeeModal').modal('show');
             },
             error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Failed to fetch asset details.'
+                    text: 'Failed to fetch employee details.'
                 });
             }
         });
     });
 
     // 5. Submit Form (Create & Update)
-    $('#assetForm').on('submit', function (e) {
+    $('#employeeForm').on('submit', function (e) {
         e.preventDefault();
         clearValidationErrors();
 
-        var id = $('#asset_id').val();
+        var id = $('#employee_id_pk').val();
         var isEdit = id ? true : false;
-        var url = isEdit ? '/manage-assets/' + id : '/manage-assets';
-        var method = isEdit ? 'PUT' : 'POST';
+        var url = isEdit ? '/employees/' + id : '/employees';
 
-        // Get form data
-        var formData = {
-            asset_code: $('#asset_code').val(),
-            name: $('#name').val(),
-            serial_number: $('#serial_number').val(),
-            purchase_price: $('#purchase_price').val(),
-            purchase_date: $('#purchase_date').val(),
-            condition: $('#condition').val(),
-            warranty_expiry: $('#warranty_expiry').val(),
-            maintenance_date: $('#maintenance_date').val(),
-            notes: $('#notes').val()
-        };
+        var formData = new FormData(this);
+        if (isEdit) {
+            // Enable disabled fields so they are submitted in FormData (like user_id)
+            $('#employeeForm').find(':disabled').each(function () {
+                formData.append($(this).attr('name'), $(this).val());
+            });
+            formData.append('_method', 'PUT');
+        }
 
         $.ajax({
             url: url,
-            method: method,
+            method: 'POST', // Use POST for FormData support with file uploads
             data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
-                $('#assetModal').modal('hide');
+                $('#employeeModal').modal('hide');
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -102,7 +100,7 @@ $(document).ready(function () {
                     timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
-                    fetchAssets(window.location.href);
+                    fetchEmployees(window.location.href);
                 });
             },
             error: function (xhr) {
@@ -111,11 +109,10 @@ $(document).ready(function () {
                     $.each(errors, function (key, messages) {
                         var field = $('#' + key);
                         field.addClass('is-invalid');
-                        // Add error message text
                         field.after(`<div class="invalid-feedback dynamic-error">${messages[0]}</div>`);
                     });
                 } else {
-                    var errMsg = 'An error occurred while saving the asset.';
+                    var errMsg = 'An error occurred while saving the employee.';
                     if (xhr.responseJSON && xhr.responseJSON.error) {
                         errMsg = xhr.responseJSON.error;
                     } else if (xhr.responseJSON && xhr.responseJSON.message) {
@@ -131,7 +128,7 @@ $(document).ready(function () {
         });
     });
 
-    // 6. Delete Asset
+    // 6. Delete Employee
     $(document).on('click', '.delete-btn', function () {
         var id = $(this).data('id');
         Swal.fire({
@@ -145,7 +142,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/manage-assets/' + id,
+                    url: '/employees/' + id,
                     method: 'DELETE',
                     success: function (response) {
                         Swal.fire({
@@ -155,14 +152,14 @@ $(document).ready(function () {
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            fetchAssets(window.location.href);
+                            fetchEmployees(window.location.href);
                         });
                     },
                     error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Failed to delete asset.'
+                            text: 'Failed to delete employee.'
                         });
                     }
                 });
@@ -171,22 +168,42 @@ $(document).ready(function () {
     });
 
     // Helper: Populate Modal Fields
-    function populateModal(asset) {
-        $('#asset_id').val(asset.id);
-        $('#asset_code').val(asset.asset_code);
-        $('#name').val(asset.name);
-        $('#serial_number').val(asset.serial_number);
-        $('#purchase_price').val(asset.purchase_price);
-        $('#purchase_date').val(asset.purchase_date);
-        $('#condition').val(asset.condition);
+    function populateModal(employee) {
+        $('#employee_id_pk').val(employee.id);
+        $('#name').val(employee.name);
+        $('#email').val(employee.email);
+        $('#employee_id').val(employee.employee_id);
+        $('#phone').val(employee.phone);
+        $('#position').val(employee.position);
+        $('#department').val(employee.department);
 
-        var warrantyDate = asset.warranty_expiry ? asset.warranty_expiry.split('T')[0] : '';
-        $('#warranty_expiry').val(warrantyDate);
+        var joinDate = employee.join_date ? employee.join_date.split('T')[0] : '';
+        $('#join_date').val(joinDate);
+        $('#status').val(employee.status);
 
-        var maintDate = asset.maintenance_date ? asset.maintenance_date.split('T')[0] : '';
-        $('#maintenance_date').val(maintDate);
+        // Populate user dropdown
+        if (employee.user) {
+            // Check if user option already exists, if not add it dynamically
+            if ($('#user_id option[value="' + employee.user_id + '"]').length === 0) {
+                $('#user_id').append(
+                    $('<option>', {
+                        value: employee.user_id,
+                        text: employee.user.name + ' (' + employee.user.email + ')',
+                        class: 'dynamic-option'
+                    })
+                );
+            }
+            $('#user_id').val(employee.user_id);
+        } else {
+            $('#user_id').val('');
+        }
 
-        $('#notes').val(asset.notes);
+        if (employee.profile_photo) {
+            $('.current-avatar-preview').removeClass('d-none');
+            $('#avatar_preview_img').attr('src', '/storage/' + employee.profile_photo);
+        } else {
+            $('.current-avatar-preview').addClass('d-none');
+        }
     }
 
     // Helper: Clear validation errors
@@ -196,8 +213,8 @@ $(document).ready(function () {
     }
 
     // Helper: AJAX Table Fetching with state preservation
-    function fetchAssets(url, pushToHistory = true) {
-        var wrapper = $('#assets-table-wrapper');
+    function fetchEmployees(url, pushToHistory = true) {
+        var wrapper = $('#employees-table-wrapper');
         wrapper.css('opacity', 0.5);
         $.ajax({
             url: url,
@@ -215,24 +232,24 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Failed to fetch assets.'
+                    text: 'Failed to fetch employees.'
                 });
             }
         });
     }
 
     // Intercept click on sorting headers and pagination links
-    $(document).on('click', '#assets-table-wrapper .sort-link, #assets-table-wrapper .pagination-container a', function (e) {
+    $(document).on('click', '#employees-table-wrapper .sort-link, #employees-table-wrapper .pagination-container a', function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
         if (url) {
-            fetchAssets(url);
+            fetchEmployees(url);
         }
     });
 
     // Listen to history navigation (back/forward)
     $(window).on('popstate', function () {
-        fetchAssets(window.location.href, false);
+        fetchEmployees(window.location.href, false);
     });
 
     // Prevent default form submission for search
@@ -240,10 +257,9 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
-    // 7. Auto-search on input with Debounce and cursor restoration
+    // Auto-search on input with Debounce and cursor restoration
     var searchInput = $('input[name="search"]');
     if (searchInput.length) {
-        // Restore focus and cursor position at the end of input if search has a value
         if (searchInput.val()) {
             searchInput.focus();
             var valLength = searchInput.val().length;
@@ -261,9 +277,8 @@ $(document).ready(function () {
                 } else {
                     currentUrl.searchParams.set('search', val);
                 }
-                // Reset page on search change to avoid empty pages
                 currentUrl.searchParams.delete('page');
-                fetchAssets(currentUrl.toString());
+                fetchEmployees(currentUrl.toString());
             }, 1000); // 1000ms debounce
         });
     }

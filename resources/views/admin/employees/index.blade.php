@@ -27,5 +27,5 @@
 @endsection
 
 @push('scripts')
-    @vite('resources/js/employee.js')
+    <script src="{{ asset('assets/js/employee.js') }}?v={{ filemtime(public_path('assets/js/employee.js')) }}"></script>
 @endpush
