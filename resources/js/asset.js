@@ -1,3 +1,5 @@
+const $ = window.jQuery;
+
 $(document).ready(function () {
     // 1. AJAX Setup for CSRF Token
     $.ajaxSetup({
