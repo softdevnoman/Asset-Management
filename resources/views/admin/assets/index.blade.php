@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('page-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-icons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}" />
 @endsection
 @section('content')
     <div class="container-fluid flex-grow-1 container-p-y">

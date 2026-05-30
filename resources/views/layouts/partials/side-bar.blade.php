@@ -31,13 +31,6 @@
                     </a>
                 </li>
             </ul>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('accounts') }}" class="menu-link">
-                        <div> Accounts</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <!-- Accounts -->
         <li class="menu-item">
@@ -47,11 +40,19 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
+                    <a href="{{ route('accounts') }}" class="menu-link">
+                        <div> Accounts</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="menu-sub">
+                <li class="menu-item">
                     <a href="{{ route('employees') }}" class="menu-link">
                         <div> Employee </div>
                     </a>
                 </li>
             </ul>
+
         </li>
     </ul>
 </aside>

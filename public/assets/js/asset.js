@@ -196,7 +196,31 @@ $(document).ready(function () {
     // Helper: AJAX Table Fetching with state preservation
     function fetchAssets(url, pushToHistory = true) {
         var wrapper = $('#assets-table-wrapper');
-        wrapper.css('opacity', 0.5);
+        wrapper.css({
+            'opacity': 0.5,
+            'position': 'relative'
+        });
+
+        // Dynamic loading spinner overlay centered inside the wrapper
+        var spinnerHtml = `
+            <div class="table-loading-overlay d-flex align-items-center justify-content-center" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 99; min-height: 150px;">
+                <div class="sk-circle-fade">
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                    <div class="sk-circle-fade-dot"></div>
+                </div>
+            </div>`;
+        wrapper.append(spinnerHtml);
+
         $.ajax({
             url: url,
             type: 'GET',
@@ -210,6 +234,7 @@ $(document).ready(function () {
             },
             error: function () {
                 wrapper.css('opacity', 1);
+                wrapper.find('.table-loading-overlay').remove();
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
