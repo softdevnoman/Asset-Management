@@ -20,6 +20,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
+        if (auth()->user()->role === 'super_admin') {
+            return redirect()->route('accounts');
+        }
         return view('dashboard');
     })->name('dashboard');
 
