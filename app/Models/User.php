@@ -28,17 +28,23 @@ class User extends Authenticatable
         'password',
         'role',
     ];
+
+    const SUPER_ADMIN = 'super_admin';
+    const ADMIN = 'admin';
+    const EMPLOYEE = 'employee';
+
+
     public function isSuperAdmin(): bool
     {
-        return $this->role === 'super_admin';
+        return $this->role ===  self::SUPER_ADMIN;
     }
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === self::ADMIN;
     }
     public function isEmployee(): bool
     {
-        return $this->role === 'employee';
+        return $this->role === self::EMPLOYEE;
     }
     /**
      * The attributes that should be hidden for serialization.
