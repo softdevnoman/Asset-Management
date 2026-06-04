@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['auth', 'role:super_admin, admin, employee'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
     Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:super_admin, admin, employee'])->group(function
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 });
 
-Route::middleware(['auth', 'role:super_admin, admin, employee '])->group(function () {
+Route::middleware(['auth', 'role:admin, employee '])->group(function () {
     Route::get('/manage-assets', [AssetController::class, 'index'])->name('assets');
     Route::post('/manage-assets', [AssetController::class, 'store'])->name('assets.store');
     Route::get('/manage-assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
