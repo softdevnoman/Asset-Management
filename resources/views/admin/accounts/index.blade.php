@@ -29,34 +29,5 @@
 @endsection
 
 @push('scripts')
-    {{-- Placeholders for future accounts JS interactions --}}
-    <script>
-        $(document).ready(function() {
-            // Setup clear/reset of forms on modal close
-            $('#accountModal').on('hidden.bs.modal', function() {
-                $('#accountForm')[0].reset();
-                $('#account_id_pk').val('');
-                $('#accountModalLabel').text('Add New Admin');
-                
-                // Reset password fields to required
-                $('#password, #password_confirmation').prop('required', true);
-                $('#password-asterisk, #confirm-password-asterisk').removeClass('d-none');
-                $('.id-note').addClass('d-none');
-            });
-
-            // Handle edit buttons (static click handler for now)
-            $(document).on('click', '.edit-btn', function() {
-                const id = $(this).data('id');
-                $('#accountModalLabel').text('Edit Admin Account');
-                
-                // Passwords are optional on edit, so toggle attributes
-                $('#password, #password_confirmation').prop('required', false);
-                $('#password-asterisk, #confirm-password-asterisk').addClass('d-none');
-                $('.id-note').removeClass('d-none');
-                
-                // Show modal
-                $('#accountModal').modal('show');
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/js/account.js') }}?v={{ filemtime(public_path('assets/js/account.js')) }}"></script>
 @endpush

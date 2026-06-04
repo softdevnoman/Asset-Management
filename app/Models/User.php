@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -27,11 +28,15 @@ class User extends Authenticatable
         'password',
         'role',
     ];
-    public function isAdmin():bool
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
-    public function isEmployee():bool
+    public function isEmployee(): bool
     {
         return $this->role === 'employee';
     }
