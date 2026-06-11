@@ -26,7 +26,8 @@ class Employee extends Model
         'status',
     ];
 
-    protected function casts(){
+    protected function casts()
+    {
         return [
             'join_date' => 'date',
         ];

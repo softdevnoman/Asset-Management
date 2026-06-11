@@ -401,7 +401,8 @@
                                 <div class="d-grid px-2 pt-2 pb-1">
                                     <form method="POST" action="{{ route('logout') }}" class="d-grid">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center justify-content-center">
+                                        <button type="submit"
+                                            class="btn btn-sm btn-danger d-flex align-items-center justify-content-center">
                                             <small class="align-middle">Logout</small>
                                             <i class="icon-base ti tabler-logout ms-2 icon-14px"></i>
                                         </button>

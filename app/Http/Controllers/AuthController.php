@@ -7,16 +7,18 @@ use Illuminate\Http\Client\Events\RequestSending;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\Auth;
 use Illuminate\support\Facades\Hash;
+
 class AuthController extends Controller
 {
-    public function showRegisterForm(){
+    public function showRegisterForm()
+    {
         return view('auth.register');
     }
 
     public function Register(Request $request)
     {
         $data = $request->validate([
-            'name'=> ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'terms' => ['accepted']
@@ -31,19 +33,21 @@ class AuthController extends Controller
         return redirect('/dashboard');
     }
 
-    public function LoginForm(){
+    public function LoginForm()
+    {
         return view('auth.login');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
-            'email'=>['required', 'email'],
-            'password'=> ['required']
+            'email' => ['required', 'email'],
+            'password' => ['required']
         ]);
 
         $remember = $request->has('remember');
 
-        if(Auth::attempt($credentials, $remember)){
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
