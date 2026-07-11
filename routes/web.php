@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Employee\EmployeeController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 
 
 Route::get('/', function () {
@@ -51,4 +53,12 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/accounts/{user}', [AccountController::class, 'show'])->name('accounts.show');
     Route::put('/accounts/{user}', [AccountController::class, 'update'])->name('accounts.update');
     Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
+});
+
+Route::get('/test-email', function () {
+
+    Mail::to('nmn8122@gmail.com')
+        ->send(new TestMail());
+
+    return 'Email Sent Successfully';
 });
