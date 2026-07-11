@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
+            $table->string('company_name');
+            $table->string('company_email')->unique()->nullable();
+            $table->string('subscription_plan')->default('basic');
+            $table->enum('status', ['active', 'suspended', 'cancelled'])->default('active');
             $table->timestamps();
         });
     }
