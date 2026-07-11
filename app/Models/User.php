@@ -27,6 +27,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'account_id',
+        'otp',
+        'verification_token',
     ];
 
     const SUPER_ADMIN = 'super_admin';
@@ -82,5 +85,10 @@ class User extends Authenticatable
     public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
+    }
+
+    public function account(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Account::class);
     }
 }

@@ -55,10 +55,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
 });
 
-Route::get('/test-email', function () {
-
-    Mail::to('nmn8122@gmail.com')
-        ->send(new TestMail());
-
-    return 'Email Sent Successfully';
-});
+// Verification & OTP routes
+Route::get('/verify-organization/{token}', [AuthController::class, 'verifyLink'])->name('verification.link');
+Route::get('/verify-otp', [AuthController::class, 'showVerifyOtpForm'])->name('verification.otp.form');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verification.otp.submit');
