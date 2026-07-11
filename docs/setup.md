@@ -98,3 +98,20 @@ php artisan test
 > <env name="DB_CONNECTION" value="sqlite"/>
 > <env name="DB_DATABASE" value=":memory:"/>
 > ```
+
+---
+
+## 4. Current Test Suite Status & Known Failures
+
+When running `php artisan test` on the current repository state, several tests will fail due to differences between the active codebase and default scaffolding:
+
+### A. Integrity Constraint Violations in `AssetCrudTest`
+* **Symptoms**: SQL errors stating `Integrity constraint violation: 19 NOT NULL constraint failed: assets.account_id`.
+* **Cause**: The `assets` table schema has a NOT NULL constraint on `account_id` to enforce multi-tenancy. However, the automated test suite in [tests/Feature/AssetCrudTest.php](file:///c:/laragon/www/asset-managment/tests/Feature/AssetCrudTest.php) instantiates assets via `Asset::create([...])` without defining a parent `account_id`.
+* **Resolution**: The tests need to be updated to generate a tenant company (`Account`) first and merge `'account_id' => $account->id` into the test asset creation arrays.
+
+### B. Missing Route Exceptions in `Auth` and `Profile` Tests
+* **Symptoms**: Errors such as `Route [verification.verify] not defined` and multiple HTTP `404` status failures on password updates, profile deletes, and password confirmation pages.
+* **Cause**: Default test scripts from Laravel Breeze (e.g. `EmailVerificationTest.php`, `PasswordResetTest.php`, `PasswordUpdateTest.php`, `PasswordConfirmationTest.php`, and `ProfileTest.php`) are present in the directory. However, the custom routing schema in [routes/web.php](file:///c:/laragon/www/asset-managment/routes/web.php) does not define endpoints for these features.
+* **Resolution**: Either implement these routes and corresponding controller logic, or clean up the unused test files if these features are excluded from the project scope.
+
